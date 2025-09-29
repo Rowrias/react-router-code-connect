@@ -26,22 +26,23 @@ export const useAuth = () => {
   }, [])
 
   const register = (name, email, password) => {
+    
     try {
       const existingUsers = JSON.parse(localStorage.getItem('auth_users') || '[]')
       const userExists = existingUsers.find(u => u.email === email)
-      
+
       if (userExists) {
         throw new Error('Usuário já existe com este email')
       }
 
       const newUser = createUser(name, email, password)
-      
+
       existingUsers.push(newUser)
       localStorage.setItem('auth_users', JSON.stringify(existingUsers))
-      
+
       setUser(newUser)
       localStorage.setItem('auth_user', JSON.stringify(newUser))
-      
+
       return { success: true, user: newUser }
     } catch (error) {
       return { success: false, error: error.message }
@@ -52,14 +53,14 @@ export const useAuth = () => {
     try {
       const users = JSON.parse(localStorage.getItem('auth_users') || '[]')
       const user = users.find(u => u.email === email && u.password === password)
-      
+
       if (!user) {
         throw new Error('Email ou senha incorretos')
       }
 
       setUser(user)
       localStorage.setItem('auth_user', JSON.stringify(user))
-      
+
       return { success: true, user }
     } catch (error) {
       return { success: false, error: error.message }
